@@ -17,11 +17,11 @@
     position:absolute;
     top:50px;left:50px;
     border-radius:3px;
-    cursor:grab;
     user-select:none;
     display:none;
     transform:scale(0.65);
     transform-origin:top left;
+    cursor:default;
   }
 </style>
 </head>
@@ -50,9 +50,8 @@
     dragging=true;
     dx=e.clientX-img.offsetLeft;
     dy=e.clientY-img.offsetTop;
-    img.style.cursor='grabbing';
   });
-  window.addEventListener('mouseup',()=>{dragging=false;img.style.cursor='grab';});
+  window.addEventListener('mouseup',()=>{dragging=false;});
   window.addEventListener('mousemove',e=>{
     if(!dragging)return;
     img.style.left=(e.clientX-dx)+'px';
