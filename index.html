@@ -47,8 +47,7 @@
 
   img.addEventListener('dragstart', e => e.preventDefault());
 
-  let dragging=false,dx=0,dy=0,targetX=50,targetY=50;
-
+  let dragging=false,dx=0,dy=0;
   img.addEventListener('mousedown',e=>{
     dragging=true;
     dx=e.clientX-img.offsetLeft;
@@ -58,18 +57,9 @@
   window.addEventListener('mouseup',()=>{dragging=false;});
   window.addEventListener('mousemove',e=>{
     if(!dragging)return;
-    targetX=e.clientX-dx;
-    targetY=e.clientY-dy;
+    img.style.left=(e.clientX-dx)+'px';
+    img.style.top=(e.clientY-dy)+'px';
   });
-
-  function animate(){
-    const x=parseFloat(img.style.left||targetX);
-    const y=parseFloat(img.style.top||targetY);
-    img.style.left=x+(targetX-x)*0.1+'px';
-    img.style.top=y+(targetY-y)*0.1+'px';
-    requestAnimationFrame(animate);
-  }
-  animate();
 
   window.addEventListener('keydown',e=>{
     if(e.code==='Insert'){
