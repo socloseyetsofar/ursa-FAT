@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>vidskid</title>
+<style>
+  html,body {height:100%;margin:0;background:#000}
+  video{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+    background:#000;
+    outline:none;
+    -webkit-user-select:none; user-select:none;
+  }
+  #missing {
+    position:fixed;inset:0;display:flex;align-items:center;justify-content:center;
+    color:#ddd;background:#000;font-family:system-ui,Segoe UI,Roboto,Arial,sans-serif;
+  }
+</style>
+</head>
+<body>
+<video id="v" playsinline autoplay loop muted preload="auto" tabindex="-1">
+  <source src="vidskid.mp4" type="video/mp4">
+  <!-- fallback text -->
+</video>
+<div id="missing" style="display:none">vidskid.mp4 not found.</div>
+
+<script>
+(function(){
+  const v = document.getElementById('v');
+  const missing = document.getElementById('missing');
+
+  // attempt play and detect missing file
+  v.addEventListener('error', ()=> {
+    v.style.display = 'none';
+    missing.style.display = 'flex';
+  }, {once:true});
+
+  // ensure playback (browsers require muted for autoplay)
+  function ensurePlay(){
+    v.play().catch(()=>{/* ignored */});
+  }
+  ensurePlay();
+
+  // prevent pause/seeking
+  v.addEventListener('pause', ()=> { ensurePlay(); }, {capture:true});
+  v.addEventListener('seeking', ()=> { ensurePlay(); }, {capture:true});
+  v.addEventListener('emptied', ()=> { ensurePlay(); });
+
+  // disable context menu and pointer-based controls
+  v.addEventListener('contextmenu', e => e.preventDefault());
+  v.addEventListener('dblclick', e => e.preventDefault());
+
+  // block keys that might pause (space) or change playback
+  window.addEventListener('keydown', e=>{
+    if ([' ','MediaPlayPause','MediaStop','k','K'].includes(e.key)) e.preventDefault();
+  }, {passive:false});
+
+  // when page hidden/visible, try to resume
+  document.addEventListener('visibilitychange', ()=> {
+    if (!document.hidden) ensurePlay();
+  });
+
+  // small watchdog to recover if playback is interrupted
+  setInterval(()=>{ if (v.paused) ensurePlay(); }, 1000);
+})();
+</script>
+</body>
+</html>
