@@ -65,8 +65,8 @@
   function animate(){
     const x=parseFloat(img.style.left||targetX);
     const y=parseFloat(img.style.top||targetY);
-    img.style.left=x+(targetX-x)*0.25+'px';
-    img.style.top=y+(targetY-y)*0.25+'px';
+    img.style.left=x+(targetX-x)*0.1+'px';
+    img.style.top=y+(targetY-y)*0.1+'px';
     requestAnimationFrame(animate);
   }
   animate();
