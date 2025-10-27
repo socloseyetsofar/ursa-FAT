@@ -30,7 +30,7 @@
   <source src="vidskid (online-video-cutter.com).mp4" type="video/mp4">
 </video>
 <div id="missing" style="display:none">vidskid.mp4 not found.</div>
-<img id="imgbox" src="fatatata.png" alt="fatatata">
+<img id="imgbox" src="fatatata.png" alt="fatatata" draggable="false">
 
 <script>
 (function(){
@@ -45,11 +45,15 @@
   setInterval(()=>{if(v.paused)play();},1000);
   play();
 
+  // prevent browser drag ghost image
+  img.addEventListener('dragstart', e => e.preventDefault());
+
   let dragging=false,dx=0,dy=0;
   img.addEventListener('mousedown',e=>{
     dragging=true;
     dx=e.clientX-img.offsetLeft;
     dy=e.clientY-img.offsetTop;
+    e.preventDefault();
   });
   window.addEventListener('mouseup',()=>{dragging=false;});
   window.addEventListener('mousemove',e=>{
